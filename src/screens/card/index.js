@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
 import axios from "axios";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from "@mui/material";
+import { ExpandMoreIcon, BookmarkBorderIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+
 function Card() {
   const navigate = useNavigate();
   const [bookmark, setBookmark] = useState([]);
@@ -35,7 +37,7 @@ function Card() {
             `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
           )
           .then(function (response) {
-            console.log(response.data,'response');
+            console.log(response.data, "response");
             setIdIndivisualData((idIndivisualData) => [
               ...idIndivisualData,
               response.data,
@@ -59,9 +61,9 @@ function Card() {
     //     }
     //   });
     // } else {
-      setBookmark((bookmark) => [...bookmark, id]);
-      console.log("Bookmark addedd");
-      localStorage.setItem("bookmark", bookmark);
+    setBookmark((bookmark) => [...bookmark, id]);
+    console.log("Bookmark addedd");
+    localStorage.setItem("bookmark", bookmark);
     // }
   };
   useEffect(() => {
@@ -113,10 +115,6 @@ function Card() {
                     <Typography>{item.text}</Typography>
                   </AccordionDetails>
                 </Accordion>
-                {/* <p className="image-name">{item.title}</p>
-                  <p className="image-name">{item.text}</p> */}
-
-                {/* </span> */}
               </div>
             );
           })}
