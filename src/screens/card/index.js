@@ -7,15 +7,14 @@ import {
   AccordionDetails,
   Typography,
 } from "@mui/material";
-// import { ExpandMoreIcon, BookmarkBorderIcon } from "@mui/icons-material";
+import { ExpandMore, BookmarkBorder, Bookmark } from "@mui/icons-material";
 import { useNavigate } from "react-router";
-
 function Card() {
   const navigate = useNavigate();
   const [bookmark, setBookmark] = useState([]);
   const [idData, setIdData] = useState([]);
   const [idIndivisualData, setIdIndivisualData] = useState([]);
-
+  const [isbookMarked, setBookmarked] = useState([]);
   const getId = () => {
     axios
       .request(
@@ -24,7 +23,7 @@ function Card() {
       .then(function (response) {
         console.log(response.data);
         setIdData(response.data);
-        console.log(idData)
+        console.log(idData);
       })
       .catch(function (error) {
         console.error(error);
@@ -32,42 +31,40 @@ function Card() {
   };
   const getData = () => {
     idData &&
-      idData.map(async (item) =>
-       await axios
-          .request(
-            `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
-          )
-          .then(function (response) {
-            console.log(response.data, "response");
-            setIdIndivisualData((idIndivisualData) => [
-              ...idIndivisualData,
-              response.data,
-            ]);
-          })
-          .catch(function (error) {
-            console.error(error);
-          })
+      idData.map(
+        async (item) =>
+          await axios
+            .request(
+              `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
+            )
+            .then(function (response) {
+              console.log(response.data, "response");
+              setIdIndivisualData((idIndivisualData) => [
+                ...idIndivisualData,
+                response.data,
+              ]);
+            })
+            .catch(function (error) {
+              console.error(error);
+            })
       );
   };
-  console.log(idIndivisualData);
 
   const bookmarked = (id) => {
-    console.log(id, "idddddddddddd", bookmark);
     if (bookmark.length) {
       bookmark.forEach(() => {
         let index = bookmark.indexOf(id);
         if (index > -1) {
           bookmark.slice(index, 1);
           console.log("Bookmark removed");
-        }
-        else {
+        } else {
           setBookmark((bookmark) => [...bookmark, id]);
           localStorage.setItem("bookmark", JSON.stringify(bookmark));
-          }
+        }
       });
     } else {
-    setBookmark((bookmark) => [...bookmark, id]);
-    localStorage.setItem("bookmark", JSON.stringify(bookmark));
+      setBookmark((bookmark) => [...bookmark, id]);
+      localStorage.setItem("bookmark", JSON.stringify(bookmark));
     }
   };
   useEffect(() => {
@@ -77,7 +74,11 @@ function Card() {
     }, 0);
   }, []);
 
-  useEffect(()=>{ getData();},[idData])
+  useEffect(() => {
+    getData();
+  }, [idData]);
+  console.log({ isbookMarked });
+  console.log({ idIndivisualData });
 
   return (
     <div>
@@ -101,21 +102,36 @@ function Card() {
                 <Accordion className="accordian">
                   <AccordionSummary
                     className="sub-text"
-                    // expandIcon={<ExpandMoreIcon />}
+                    expandIcon={<ExpandMore />}
                     aria-controls="panel2a-content"
                     id="panel2a-header"
                   >
                     <Typography>{item.title}</Typography>
-                    <span
-                      className="icon-span"
-                      onClick={() => {
-                        bookmarked(item.id);
-                        console.log("called");
-                      }}
-                      style={{ position: "absolute", right: "40px" }}
-                    >sdfsd
-                      {/* <BookmarkBorderIcon /> */}
-                    </span>
+                    {!isbookMarked.length ? (
+                      <span
+                        className="icon-span"
+                        onClick={() => {
+                          bookmarked(item.id);
+                        }}
+                        style={{ position: "absolute", right: "40px" }}
+                      >
+                        <Bookmark />
+                      </span>
+                    ) : (
+                      <span
+                        className="icon-span"
+                        onClick={() => {
+                          bookmarked(item.id);
+                          setBookmarked((isbookMarked) => [
+                            ...isbookMarked,
+                            index,
+                          ]);
+                        }}
+                        style={{ position: "absolute", right: "40px" }}
+                      >
+                        <BookmarkBorder />
+                      </span>
+                    )}
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography>{item.text}</Typography>
