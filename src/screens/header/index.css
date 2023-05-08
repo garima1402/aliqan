@@ -1,0 +1,16 @@
+.main-wrapper {
+  background-color: #4797e8;
+  color: #ffff;
+  display: flex;
+  justify-content: space-between;
+}
+.header-content {
+  width: 40%;
+  display: flex;
+  justify-content: space-evenly;
+  margin: 0 auto;
+  cursor: pointer;
+}
+.active {
+  text-decoration: underline;
+}

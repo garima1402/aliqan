@@ -1,40 +1,71 @@
 import React, { useEffect, useState } from "react";
-import "./index.css";
-function Card() {
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-  const data = [1, 2, 3, 4, 5];
+function BookMarked() {
+  const [bookmark, setBookmark] = useState([]);
 
+  let bookmarkedData;
+  useEffect(() => {
+    bookmarkedData = localStorage.getItem("bookmark");
+  }, [bookmarkedData]);
+  const bookmarked = (id) => {
+    bookmark.forEach(() => {
+      let index = bookmark.indexOf(id);
+      if (index > -1) {
+        bookmark.slice(index, 1);
+        console.log("Bookmark removed");
+      } else {
+        setBookmark((bookmark) => [...bookmark, id]);
+        localStorage.setItem("bookmark", bookmark);
+        console.log("Bookmark addedd");
+      }
+    });
+  };
   return (
     <div>
       <div className="container">
         <div className="heading-wrapper">
-          <h2 className="main-text">News</h2>
+          <h2 className="main-text">Bookmarked</h2>
         </div>
-
         <div className="card-box">
-          {data?.map((item, index) => {
+          {bookmarkedData?.map((item, index) => {
             return (
-              <div key={index} className="row">
-                <img
-                  className="image"
-                  src="https://www.eatthis.com/wp-content/uploads/sites/4/2023/03/Fast-food-signature-burgers-taste-test.jpg?quality=82&strip=1&w=640"
-                  alt="No_Image"
-                />
-                <span className="span">
-                  <p className="image-name">Hello</p>
-                  <span
-                    className="icon-span"
-                    onClick={() => {
-                      console.log("bookmarked");
-                    }}
+              <div key={item.id} className="row">
+                {/* <span className="span"> */}
+                <Accordion className="accordian">
+                  <AccordionSummary
+                    className="sub-text"
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
                   >
-                    <img
-                      className="icon"
-                      src="https://static.vecteezy.com/system/resources/thumbnails/005/200/965/small/bookmark-black-color-icon-vector.jpg"
-                      alt="icon"
-                    />
-                  </span>
-                </span>
+                    <Typography>{item.title}</Typography>
+                    <span
+                      className="icon-span"
+                      onClick={() => {
+                        bookmarked(item.id);
+                        console.log("called");
+                      }}
+                    >
+                      <img
+                        className="icon"
+                        src="https://static.vecteezy.com/system/resources/thumbnails/005/200/965/small/bookmark-black-color-icon-vector.jpg"
+                        alt="icon"
+                      />
+                    </span>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>{item.text}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+                {/* <p className="image-name">{item.title}</p>
+                    <p className="image-name">{item.text}</p> */}
+
+                {/* </span> */}
               </div>
             );
           })}
@@ -43,4 +74,4 @@ function Card() {
     </div>
   );
 }
-export default Card;
+export default BookMarked;

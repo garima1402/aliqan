@@ -6,23 +6,24 @@
   overflow-x: hidden;
   border: 1px solid #f1f1f1;
   background-color: #fff;
-  padding: 20px 0 10px 0;
   margin: 2rem 2rem;
 }
 .heading-wrapper {
   display: flex;
   justify-content: space-between;
-  margin: 0px 0 0 2rem;
+  background-color: #eeaeca;
 }
 .main-text {
   font-weight: 400;
   color: #000000;
   margin-bottom: 0px;
   font-size: 50px;
+  cursor: pointer;
 }
 .sub-text {
   font-weight: 400;
-  color: #c0c0c0;
+  display: flex;
+  text-align: left;
 }
 .row {
   min-width: 10rem;
@@ -43,9 +44,17 @@
 .icon {
   width: 40px;
   height: 40px;
-  right: 0;
+  right: 45px;
   position: absolute;
   top: 8px;
+}
+.accordian {
+  background: rgb(238, 174, 202);
+  background: radial-gradient(
+    circle,
+    rgba(238, 174, 202, 1) 0%,
+    rgba(148, 187, 233, 1) 100%
+  );
 }
 @media screen and (max-width: 480px) {
   main-text {

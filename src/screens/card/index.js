@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./index.css";
 import axios from "axios";
-// import { useNavigate } from "react-router";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useNavigate } from "react-router";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 function Card() {
-  //   const navigate = useNavigate();
-  //   const [title, setTitle] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+  const navigate = useNavigate();
   const [bookmark, setBookmark] = useState([]);
   const [idData, setIdData] = useState([]);
   const [idIndivisualData, setIdIndivisualData] = useState([]);
@@ -44,17 +49,20 @@ function Card() {
   console.log(idIndivisualData);
 
   const bookmarked = (id) => {
-    bookmark.forEach(() => {
-      let index = bookmark.indexOf(id);
-      if (index > -1) {
-        bookmark.slice(index, 1);
-        console.log("Bookmark removed");
-      } else {
-        setBookmark((bookmark) => [...bookmark, id]);
-        localStorage.setItem("bookmark", bookmark);
-        console.log("Bookmark addedd");
-      }
-    });
+    console.log(id, "idddddddddddd", bookmark);
+    // if (bookmark.length) {
+    //   bookmark.forEach(() => {
+    //     let index = bookmark.indexOf(id);
+    //     if (index > -1) {
+    //       bookmark.slice(index, 1);
+    //       console.log("Bookmark removed");
+    //     }
+    //   });
+    // } else {
+      setBookmark((bookmark) => [...bookmark, id]);
+      console.log("Bookmark addedd");
+      localStorage.setItem("bookmark", bookmark);
+    // }
   };
   useEffect(() => {
     getId();
@@ -67,31 +75,48 @@ function Card() {
     <div>
       <div className="container">
         <div className="heading-wrapper">
-          <h2 className="main-text">News</h2>
+          <h2
+            className="main-text"
+            style={{ marginLeft: "35px", textDecoration: "underline" }}
+          >
+            News
+          </h2>
+          <h2 className="main-text" onClick={() => navigate("/bookmarked")}>
+            Bookmarked
+          </h2>
         </div>
 
         <div className="card-box">
           {idIndivisualData?.map((item) => {
             return (
               <div key={item.id} className="row">
-                <span className="span">
-                  <p className="image-name">{item.title}</p>
-                  <p className="image-name">{item.text}</p>
-
-                  <span
-                    className="icon-span"
-                    onClick={() => {
-                      bookmarked(item.id);
-                      console.log('called');
-                    }}
+                <Accordion className="accordian">
+                  <AccordionSummary
+                    className="sub-text"
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel2a-content"
+                    id="panel2a-header"
                   >
-                    <img
-                      className="icon"
-                      src="https://static.vecteezy.com/system/resources/thumbnails/005/200/965/small/bookmark-black-color-icon-vector.jpg"
-                      alt="icon"
-                    />
-                  </span>
-                </span>
+                    <Typography>{item.title}</Typography>
+                    <span
+                      className="icon-span"
+                      onClick={() => {
+                        bookmarked(item.id);
+                        console.log("called");
+                      }}
+                      style={{ position: "absolute", right: "40px" }}
+                    >
+                      <BookmarkBorderIcon />
+                    </span>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>{item.text}</Typography>
+                  </AccordionDetails>
+                </Accordion>
+                {/* <p className="image-name">{item.title}</p>
+                  <p className="image-name">{item.text}</p> */}
+
+                {/* </span> */}
               </div>
             );
           })}
