@@ -7,7 +7,7 @@ import {
   AccordionDetails,
   Typography,
 } from "@mui/material";
-import { ExpandMoreIcon, BookmarkBorderIcon } from "@mui/icons-material";
+// import { ExpandMoreIcon, BookmarkBorderIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 
 function Card() {
@@ -24,6 +24,7 @@ function Card() {
       .then(function (response) {
         console.log(response.data);
         setIdData(response.data);
+        console.log(idData)
       })
       .catch(function (error) {
         console.error(error);
@@ -31,8 +32,8 @@ function Card() {
   };
   const getData = () => {
     idData &&
-      idData.map((item) =>
-        axios
+      idData.map(async (item) =>
+       await axios
           .request(
             `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
           )
@@ -52,19 +53,22 @@ function Card() {
 
   const bookmarked = (id) => {
     console.log(id, "idddddddddddd", bookmark);
-    // if (bookmark.length) {
-    //   bookmark.forEach(() => {
-    //     let index = bookmark.indexOf(id);
-    //     if (index > -1) {
-    //       bookmark.slice(index, 1);
-    //       console.log("Bookmark removed");
-    //     }
-    //   });
-    // } else {
+    if (bookmark.length) {
+      bookmark.forEach(() => {
+        let index = bookmark.indexOf(id);
+        if (index > -1) {
+          bookmark.slice(index, 1);
+          console.log("Bookmark removed");
+        }
+        else {
+          setBookmark((bookmark) => [...bookmark, id]);
+          localStorage.setItem("bookmark", JSON.stringify(bookmark));
+          }
+      });
+    } else {
     setBookmark((bookmark) => [...bookmark, id]);
-    console.log("Bookmark addedd");
-    localStorage.setItem("bookmark", bookmark);
-    // }
+    localStorage.setItem("bookmark", JSON.stringify(bookmark));
+    }
   };
   useEffect(() => {
     getId();
@@ -72,6 +76,8 @@ function Card() {
       getData();
     }, 0);
   }, []);
+
+  useEffect(()=>{ getData();},[idData])
 
   return (
     <div>
@@ -95,7 +101,7 @@ function Card() {
                 <Accordion className="accordian">
                   <AccordionSummary
                     className="sub-text"
-                    expandIcon={<ExpandMoreIcon />}
+                    // expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel2a-content"
                     id="panel2a-header"
                   >
@@ -107,8 +113,8 @@ function Card() {
                         console.log("called");
                       }}
                       style={{ position: "absolute", right: "40px" }}
-                    >
-                      <BookmarkBorderIcon />
+                    >sdfsd
+                      {/* <BookmarkBorderIcon /> */}
                     </span>
                   </AccordionSummary>
                   <AccordionDetails>

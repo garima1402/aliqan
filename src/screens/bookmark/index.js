@@ -7,20 +7,25 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
+import { json } from "react-router";
 
 function BookMarked() {
   const [bookmarkData, setBookmarkData] = useState([]);
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    setData(localStorage.getItem("bookmark"));
-    console.log(data);
+    setData(JSON.parse(localStorage.getItem("bookmark")));
+    console.log(data,"ydsfvkdas");
     getData();
   }, []);
 
+  useEffect(()=>{
+    getData();
+  },[data])
+
   function getData() {
-    data?.map((item) =>
-      axios
+    data?.map(async (item) =>
+     await axios
         .request(
           `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
         )
