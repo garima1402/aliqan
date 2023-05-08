@@ -7,26 +7,23 @@ import {
   AccordionDetails,
   Typography,
 } from "@mui/material";
-import { ExpandMore, BookmarkBorder, Bookmark } from "@mui/icons-material";
+import { ExpandMore, BookmarkBorder } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 function Card() {
   const navigate = useNavigate();
   const [bookmark, setBookmark] = useState([]);
   const [idData, setIdData] = useState([]);
   const [idIndivisualData, setIdIndivisualData] = useState([]);
-  const [isbookMarked, setBookmarked] = useState([]);
-  const getId = () => {
-    axios
+
+  const getId = async () => {
+    await axios
       .request(
         "https://hacker-news.firebaseio.com/v0/askstories.json?print=pretty"
       )
       .then(function (response) {
-        console.log(response.data);
         setIdData(response.data);
-        console.log(idData);
       })
       .catch(function (error) {
-        console.error(error);
       });
   };
   const getData = () => {
@@ -38,7 +35,6 @@ function Card() {
               `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
             )
             .then(function (response) {
-              console.log(response.data, "response");
               setIdIndivisualData((idIndivisualData) => [
                 ...idIndivisualData,
                 response.data,
@@ -51,20 +47,22 @@ function Card() {
   };
 
   const bookmarked = (id) => {
+    var index = bookmark.indexOf(id);
     if (bookmark.length) {
       bookmark.forEach(() => {
-        let index = bookmark.indexOf(id);
         if (index > -1) {
           bookmark.slice(index, 1);
-          console.log("Bookmark removed");
+          alert("BookMark Removed");
         } else {
           setBookmark((bookmark) => [...bookmark, id]);
           localStorage.setItem("bookmark", JSON.stringify(bookmark));
+          alert("BookMark Added");
         }
       });
     } else {
       setBookmark((bookmark) => [...bookmark, id]);
       localStorage.setItem("bookmark", JSON.stringify(bookmark));
+      alert("BookMark Added");
     }
   };
   useEffect(() => {
@@ -77,8 +75,6 @@ function Card() {
   useEffect(() => {
     getData();
   }, [idData]);
-  console.log({ isbookMarked });
-  console.log({ idIndivisualData });
 
   return (
     <div>
@@ -107,31 +103,15 @@ function Card() {
                     id="panel2a-header"
                   >
                     <Typography>{item.title}</Typography>
-                    {!isbookMarked.length ? (
-                      <span
-                        className="icon-span"
-                        onClick={() => {
-                          bookmarked(item.id);
-                        }}
-                        style={{ position: "absolute", right: "40px" }}
-                      >
-                        <Bookmark />
-                      </span>
-                    ) : (
-                      <span
-                        className="icon-span"
-                        onClick={() => {
-                          bookmarked(item.id);
-                          setBookmarked((isbookMarked) => [
-                            ...isbookMarked,
-                            index,
-                          ]);
-                        }}
-                        style={{ position: "absolute", right: "40px" }}
-                      >
-                        <BookmarkBorder />
-                      </span>
-                    )}
+                    <span
+                      className="icon-span"
+                      onClick={() => {
+                        bookmarked(item.id);
+                      }}
+                      style={{ position: "absolute", right: "40px" }}
+                    >
+                      <BookmarkBorder />
+                    </span>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography>{item.text}</Typography>
