@@ -1,30 +1,41 @@
 import React, { useEffect, useState } from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Typography,
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import axios from "axios";
 
 function BookMarked() {
-  const [bookmark, setBookmark] = useState([]);
+  const [bookmarkData, setBookmarkData] = useState([]);
+  const [data, setData] = useState([]);
 
-  let bookmarkedData;
   useEffect(() => {
-    bookmarkedData = localStorage.getItem("bookmark");
-  }, [bookmarkedData]);
-  const bookmarked = (id) => {
-    bookmark.forEach(() => {
-      let index = bookmark.indexOf(id);
-      if (index > -1) {
-        bookmark.slice(index, 1);
-        console.log("Bookmark removed");
-      } else {
-        setBookmark((bookmark) => [...bookmark, id]);
-        localStorage.setItem("bookmark", bookmark);
-        console.log("Bookmark addedd");
-      }
-    });
-  };
+    setData(localStorage.getItem("bookmark"));
+    console.log(data);
+    getData();
+  }, []);
+
+  function getData() {
+    data?.map((item) =>
+      axios
+        .request(
+          `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
+        )
+        .then(function (response) {
+          console.log({ bookmarkData });
+          console.log(response.data, "bookmarkDataaaaaaaaaa");
+          setBookmarkData((bookmarkData) => [...bookmarkData, response.data]);
+        })
+        .catch(function (error) {
+          console.error(error);
+        })
+    );
+  }
+  console.log({ bookmarkData });
+
   return (
     <div>
       <div className="container">
@@ -32,10 +43,9 @@ function BookMarked() {
           <h2 className="main-text">Bookmarked</h2>
         </div>
         <div className="card-box">
-          {bookmarkedData?.map((item, index) => {
+          {bookmarkData?.map((item,index) => {
             return (
-              <div key={item.id} className="row">
-                {/* <span className="span"> */}
+              <div key={index} className="row">
                 <Accordion className="accordian">
                   <AccordionSummary
                     className="sub-text"
@@ -44,28 +54,11 @@ function BookMarked() {
                     id="panel2a-header"
                   >
                     <Typography>{item.title}</Typography>
-                    <span
-                      className="icon-span"
-                      onClick={() => {
-                        bookmarked(item.id);
-                        console.log("called");
-                      }}
-                    >
-                      <img
-                        className="icon"
-                        src="https://static.vecteezy.com/system/resources/thumbnails/005/200/965/small/bookmark-black-color-icon-vector.jpg"
-                        alt="icon"
-                      />
-                    </span>
                   </AccordionSummary>
                   <AccordionDetails>
                     <Typography>{item.text}</Typography>
                   </AccordionDetails>
                 </Accordion>
-                {/* <p className="image-name">{item.title}</p>
-                    <p className="image-name">{item.text}</p> */}
-
-                {/* </span> */}
               </div>
             );
           })}

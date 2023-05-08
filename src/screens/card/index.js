@@ -35,7 +35,7 @@ function Card() {
             `https://hacker-news.firebaseio.com/v0/item/${item}.json?print=pretty`
           )
           .then(function (response) {
-            console.log(response.data);
+            console.log(response.data,'response');
             setIdIndivisualData((idIndivisualData) => [
               ...idIndivisualData,
               response.data,
@@ -87,9 +87,9 @@ function Card() {
         </div>
 
         <div className="card-box">
-          {idIndivisualData?.map((item) => {
+          {idIndivisualData?.map((item, index) => {
             return (
-              <div key={item.id} className="row">
+              <div key={index} className="row">
                 <Accordion className="accordian">
                   <AccordionSummary
                     className="sub-text"
