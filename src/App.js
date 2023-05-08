@@ -2,12 +2,10 @@ import "./App.css";
 // import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Card from "./screens/card/";
-import Header from "./screens/header";
 import BookMarked from "./screens/bookmark";
 function App() {
   return (
     <div className="App">
-      {/* <Header /> */}
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Card />} />

@@ -9,8 +9,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import axios from "axios";
 import "./index.css";
 import { Bookmark } from "@mui/icons-material";
+import { useNavigate } from "react-router";
 
 function BookMarked() {
+  const navigate = useNavigate();
+
   const [bookmarkData, setBookmarkData] = useState([]);
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -42,7 +45,15 @@ function BookMarked() {
     <div>
       <div className="container">
         <div className="heading-wrapper">
-          <h2 className="main-text">Bookmarked</h2>
+          <h2
+            className="main-text"
+            style={{ marginLeft: "35px", textDecoration: "underline" }}
+          >
+            Bookmarked
+          </h2>
+          <h2 className="main-text" onClick={() => navigate("/")}>
+            News
+          </h2>
         </div>
         {bookmarkData.length > 0 ? (
           <div className="card-box">
