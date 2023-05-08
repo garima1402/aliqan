@@ -13,7 +13,6 @@ import { Bookmark } from "@mui/icons-material";
 function BookMarked() {
   const [bookmarkData, setBookmarkData] = useState([]);
   const [data, setData] = useState([]);
-
   useEffect(() => {
     setData(JSON.parse(localStorage.getItem("bookmark")));
     getData();
